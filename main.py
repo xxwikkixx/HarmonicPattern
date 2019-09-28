@@ -15,7 +15,7 @@ def tosDB():
     block = tosdb.TOSDB_DataBlock(100000, True)
 
     block.add_items('/ES:XCME')
-    block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume')
+    block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST')
 
     ### NOTICE WE ARE SLEEPING TO ALLOW DATA TO GET INTO BLOCK ###
     print("sleeping for 1.5 seconds")
@@ -24,10 +24,10 @@ def tosDB():
     # ['ASK', 'BID', 'VOLUME']
     # print(block.topics())
 
-    print(block.get('/ES:XCME', 'bid'))
-    time.sleep(.1)
-
-    tosdb.clean_up()
+    while True:
+        print(block.get('/ES:XCME', 'LAST'))
+        time.sleep(.5)
+    # tosdb.clean_up()
 
 
 def tosDBohlc():
@@ -61,4 +61,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    tosDB()
