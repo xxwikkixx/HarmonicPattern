@@ -6,14 +6,14 @@ from harmonic_func import *
 
 # Importing Data
 data = pd.read_csv('file.csv')
-data.columns = [['Date', 'Open', 'High', 'Low', 'Close', 'Volume']]
-data.Date = pd.to_datetime(data.Date, format='%d.%m.%Y %H:%M:%S.%f')
+data.columns = [['Date', 'open', 'high', 'low', 'close', 'volume']]
+data.Date = pd.to_datetime(data.Date,format='%d.%m.%Y %H:%M:%S.%f')
 data = data.set_index(data.Date)
-data = data[['Open', 'High', 'Low', 'Close', 'Volume']]
+data = data[['open', 'high', 'low', 'close', 'volume']]
 data = data.drop_duplicates(keep=False)
 
 # Select set of the data, first 100 points
-price = data.Close.copy()
+price = data.close.copy()
 
 err_allowed = 10.0/100
 
@@ -51,6 +51,3 @@ for i in range(100, len(price)):
                 plt.plot(np.arange(start, i+15), price.values[start:i+15])
                 plt.scatter(current_idx, current_pat, c='r')
                 plt.show()
-
-
-    # if butterfly == 1:
