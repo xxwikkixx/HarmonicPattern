@@ -29,7 +29,6 @@ def is_Gartley(moves, err_allowed):
     CD_range = np.array([1.27 - err_allowed, 1.618 + err_allowed]) * abs(BC)
 
     if XA>0 and AB<0 and BC>0 and CD<0:
-
         if AB_range[0] < abs(AB) < AB_range[1] and BC_range[0] < abs(BC) < BC_range[1] and CD_range[0] < abs(CD) < CD_range[1]:
            return 1
             # plt.plot(np.arange(start, i+15), price.values[start:i+15])
@@ -63,7 +62,6 @@ def is_Butterfly(moves, err_allowed):
     CD_range = np.array([1.618 - err_allowed, 2.618 + err_allowed]) * abs(BC)
 
     if XA>0 and AB<0 and BC>0 and CD<0:
-
         if AB_range[0] < abs(AB) < AB_range[1] and BC_range[0] < abs(BC) < BC_range[1] and CD_range[0] < abs(CD) < CD_range[1]:
            return 1
             # plt.plot(np.arange(start, i+15), price.values[start:i+15])
@@ -97,7 +95,6 @@ def is_Bat(moves, err_allowed):
     CD_range = np.array([1.618 - err_allowed, 2.618 + err_allowed]) * abs(BC)
 
     if XA>0 and AB<0 and BC>0 and CD<0:
-
         if AB_range[0] < abs(AB) < AB_range[1] and BC_range[0] < abs(BC) < BC_range[1] and CD_range[0] < abs(CD) < CD_range[1]:
            return 1
             # plt.plot(np.arange(start, i+15), price.values[start:i+15])
@@ -131,7 +128,6 @@ def is_Crab(moves, err_allowed):
     CD_range = np.array([2.24 - err_allowed, 3.618 + err_allowed]) * abs(BC)
 
     if XA>0 and AB<0 and BC>0 and CD<0:
-
         if AB_range[0] < abs(AB) < AB_range[1] and BC_range[0] < abs(BC) < BC_range[1] and CD_range[0] < abs(CD) < CD_range[1]:
            return 1
             # plt.plot(np.arange(start, i+15), price.values[start:i+15])
