@@ -1,11 +1,7 @@
-from timeit import default_timer
 import tosdb
 import time
-import pandas as pd
-import numpy as np
 from tosdb.intervalize import ohlc
-
-
+from timeit import default_timer
 
 def tosDB():
     tosdb.init(dllpath=r"C:\TOSDataBridge\bin\Release\x64\tos-databridge-0.9-x64.dll")
@@ -61,7 +57,6 @@ def test():
         timer = default_timer()
     tosdb.clean_up()
     print(buffer)
-
 
 if __name__ == '__main__':
     tosDB()
