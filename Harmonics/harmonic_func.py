@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from scipy.signal import argrelextrema
 
-def peak_detect(price, order=10):
+def peak_detect(price):
     # Find our relative extrema
     # Return the max indexes of the extrema
     max_idx = list(argrelextrema(price, np.greater, order=10)[0])

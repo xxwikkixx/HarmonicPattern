@@ -30,6 +30,28 @@ def plotMaxMin():
     plt.show()
 
 
+def plotPeaks(price, order=10):
+    # Find our relative extrema
+    # Return the max indexes of the extrema
+    max_idx = list(argrelextrema(price, np.greater, order=10)[0])
+    # Return the min indexes of the extrema
+    min_idx = list(argrelextrema(price, np.less, order=10)[0])
+    idx = max_idx + min_idx + [len(price) - 1]
+    idx.sort()
+    current_idx = idx[-5:]
+    start = min(current_idx)
+    end = max(current_idx)
+    current_pat = price[current_idx]
+
+    plt.title('Close Price')
+    plt.figure(dpi=800)
+    plt.plot(price.values)
+    plt.scatter(current_idx, current_pat, c='r')
+    plt.show()
+
+    return current_idx, current_pat, start, end
+
+
 def supres(ltp, n):
     """
     This function takes a numpy array of last traded price
