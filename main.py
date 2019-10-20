@@ -63,23 +63,5 @@ def test():
     print(buffer)
 
 
-def pandasTest():
-    # Importing Data
-    data = pd.read_csv('file.csv')
-    data['time'] = pd.to_datetime(data['time'], format='%d.%m.%Y %H:%M:%S.%f')
-    data = data.set_index(data['time'])
-    data = data.drop_duplicates(keep=False)
-    price = data['Close'].copy()
-    # data.columns = [['Date', 'open', 'high', 'low', 'close', 'volume']]
-    # data.Date = pd.to_datetime(data.Date, format='%d.%m.%Y %H:%M:%S.%f')
-    # data = data.set_index(data.Date)
-    # data = data[['open', 'high', 'low', 'close', 'volume']]
-    # data = data.drop_duplicates(keep=False)
-    #
-    # # Select set of the data, first 100 points
-    # price = data.close.copy()
-
-
 if __name__ == '__main__':
-    # tosDB()
-    pandasTest()
+    tosDB()
