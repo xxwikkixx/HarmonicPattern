@@ -1,8 +1,5 @@
-import pandas as pd
-import numpy as np
-from scipy.signal import argrelextrema
 import matplotlib.pyplot as plt
-from harmonic_func import *
+from Harmonics.harmonic_func import *
 
 # Importing Data
 # data = pd.read_csv('file.csv')
