@@ -1,11 +1,14 @@
 from timeit import default_timer
 import tosdb
 import time
+import pandas as pd
+import numpy as np
 from tosdb.intervalize import ohlc
 
-tosdb.init(dllpath=r"C:\TOSDataBridge\bin\Release\x64\tos-databridge-0.9-x64.dll")
+
 
 def tosDB():
+    tosdb.init(dllpath=r"C:\TOSDataBridge\bin\Release\x64\tos-databridge-0.9-x64.dll")
     # Bool value to check if its connected: True
     # print(tosdb.connected())
 
@@ -60,5 +63,23 @@ def test():
     print(buffer)
 
 
+def pandasTest():
+    # Importing Data
+    data = pd.read_csv('file.csv')
+    data['time'] = pd.to_datetime(data['time'], format='%d.%m.%Y %H:%M:%S.%f')
+    data = data.set_index(data['time'])
+    data = data.drop_duplicates(keep=False)
+    price = data['Close'].copy()
+    # data.columns = [['Date', 'open', 'high', 'low', 'close', 'volume']]
+    # data.Date = pd.to_datetime(data.Date, format='%d.%m.%Y %H:%M:%S.%f')
+    # data = data.set_index(data.Date)
+    # data = data[['open', 'high', 'low', 'close', 'volume']]
+    # data = data.drop_duplicates(keep=False)
+    #
+    # # Select set of the data, first 100 points
+    # price = data.close.copy()
+
+
 if __name__ == '__main__':
-    tosDB()
+    # tosDB()
+    pandasTest()

@@ -5,15 +5,20 @@ import matplotlib.pyplot as plt
 from harmonic_func import *
 
 # Importing Data
-data = pd.read_csv('file.csv')
-data.columns = [['Date', 'open', 'high', 'low', 'close', 'volume']]
-data.Date = pd.to_datetime(data.Date,format='%d.%m.%Y %H:%M:%S.%f')
-data = data.set_index(data.Date)
-data = data[['open', 'high', 'low', 'close', 'volume']]
-data = data.drop_duplicates(keep=False)
+# data = pd.read_csv('file.csv')
+# data.columns = [['Date', 'open', 'high', 'low', 'close', 'volume']]
+# data.Date = pd.to_datetime(data.Date,format='%d.%m.%Y %H:%M:%S.%f')
+# data = data.set_index(data.Date)
+# data = data[['open', 'high', 'low', 'close', 'volume']]
+# data = data.drop_duplicates(keep=False)
+# # Select set of the data, first 100 points
+# price = data.close.copy()
 
-# Select set of the data, first 100 points
-price = data.close.copy()
+data = pd.read_csv('file.csv')
+data['time'] = pd.to_datetime(data['time'], format='%d.%m.%Y %H:%M:%S.%f')
+data = data.set_index(data['time'])
+data = data.drop_duplicates(keep=False)
+price = data['Close'].copy()
 
 err_allowed = 10.0/100
 
