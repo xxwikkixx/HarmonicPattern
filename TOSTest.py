@@ -80,4 +80,3 @@ if __name__ == '__main__':
     #
     while True:
         data, data2 = block.get('/ES:XCME', 'LAST', date_time=True)
-        
