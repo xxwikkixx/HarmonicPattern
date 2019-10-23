@@ -23,7 +23,7 @@ def plotMaxMin():
     print(min_idx)
 
     plt.title('Close Price')
-    plt.plot(dpi=300)
+    # plt.figure(dpi=600)
     plt.plot(price.values)
     plt.scatter(max_idx, max(price.values), c='r')
     plt.scatter(min_idx, min(price.values), c='r')
