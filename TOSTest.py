@@ -8,11 +8,11 @@ from xlwings import *
 
 tosdb.init(dllpath=r"C:\TOSDataBridge\bin\Release\x64\tos-databridge-0.9-x64.dll")
 block = tosdb.TOSDB_DataBlock(100000, True)
-block.add_items('/ES:XCME')
-block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST', 'LASTX', 'BIDX', 'ASKX', 'LAST_SIZE')
+block.add_items('/MES:XCME', '/MYM:XCBT')
+block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST', 'LASTX', 'BIDX', 'ASKX', 'LAST_SIZE', 'CUSTOM5')
 ### NOTICE WE ARE SLEEPING TO ALLOW DATA TO GET INTO BLOCK ###
-print("Sleeping for 1 second")
-time.sleep(1)
+print("Sleeping for 2 second")
+time.sleep(2)
 
 def getLastPrice(symbol):
     # Bool value to check if its connected: True
@@ -44,8 +44,6 @@ def getLastPrice(symbol):
 def tosDBohlc():
     block = ohlc.tosdb.TOSDB_ThreadSafeDataBlock(10000)
     intrv = ohlc.TOSDB_OpenHighLowCloseIntervals(block, 60)
-    intrv.add_items('/ES:XCME')
-    intrv.add_topics('OPEN', 'HIGH', 'LOW')
     print(intrv.get('/ES:XCME', 'OPEN'))
 
     tosdb.clean_up()
@@ -71,12 +69,23 @@ def test():
 def RTDdata():
     pass
 
+def tosCustomStudyData():
+    while True:
+        esval, estimes = block.get('/MES:XCME', 'CUSTOM5', date_time=True)
+        ymval, ymtimes = block.get('/MYM:XCBT', 'CUSTOM5', date_time=True)
+        if esval == "1.0":
+            print("ES LONG")
+        elif esval == "0.0":
+            print("ES SHORT")
+    # tosdb.clean_up()
+
 if __name__ == '__main__':
-    # tosDBohlc()
+    # # tosDBohlc()
 
     # while True:
-    #     print(getLastPrice('/ES:XCME'))
+    #     # print(getLastPrice('/ES:XCME'))
+    #     data, times = block.get('/ES:XCME', 'LAST', date_time=True)
+    #     print(data, times)
     #     time.sleep(.5)
-    #
-    while True:
-        data, data2 = block.get('/ES:XCME', 'LAST', date_time=True)
+
+    tosStudyData()

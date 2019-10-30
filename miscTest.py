@@ -1,4 +1,5 @@
 import time
+import talib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,17 +8,19 @@ from tosdb.intervalize import ohlc
 from timeit import default_timer
 
 def plotMaxMin():
-    # data = pd.read_csv('cltick.csv')
-    data = pd.read_csv('Harmonics/file.csv')
+    data = pd.read_csv('cltick.csv')
     data['time'] = pd.to_datetime(data['time'], format='%d.%m.%Y %H:%M:%S.%f')
     data = data.set_index(data['time'])
     data = data.drop_duplicates(keep=False)
     price = data['Close']
+    price = price.drop_duplicates(keep=False)
 
     # Finds the maximums index
     max_idx = np.argmax(price.values)
     # Finds the minimums index
     min_idx = np.argmin(price.values)
+
+    SmaOutput = talib.SMA(price, 9)
 
     print(max_idx)
     print(min_idx)
@@ -25,6 +28,9 @@ def plotMaxMin():
     plt.title('Close Price')
     # plt.figure(dpi=600)
     plt.plot(price.values)
+    
+    plt.plot(SmaOutput.values)
+
     plt.scatter(max_idx, max(price.values), c='r')
     plt.scatter(min_idx, min(price.values), c='r')
     plt.show()
