@@ -9,7 +9,7 @@ from xlwings import *
 tosdb.init(dllpath=r"C:\TOSDataBridge\bin\Release\x64\tos-databridge-0.9-x64.dll")
 block = tosdb.TOSDB_DataBlock(100000, True)
 block.add_items('/MES:XCME', '/MYM:XCBT')
-block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST', 'LASTX', 'BIDX', 'ASKX', 'LAST_SIZE', 'CUSTOM5')
+block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST', 'LASTX', 'BIDX', 'ASKX', 'LAST_SIZE', 'CUSTOM5', 'CUSTOM9')
 ### NOTICE WE ARE SLEEPING TO ALLOW DATA TO GET INTO BLOCK ###
 print("Sleeping for 2 second")
 time.sleep(2)
@@ -66,8 +66,10 @@ def test():
     tosdb.clean_up()
     print(buffer)
 
-def RTDdata():
-    pass
+def tosOHLC():
+    val = block.get("/MES:XCME", "CUSTOM9", date_time=False)
+    op,hi,lo,cl = val.split("|")
+    print(op, hi, lo, cl)
 
 def tosCustomStudyData():
     while True:
@@ -88,4 +90,6 @@ if __name__ == '__main__':
     #     print(data, times)
     #     time.sleep(.5)
 
-    tosStudyData()
+    tosOHLC()
+
+    # tosStudyData()
