@@ -15,10 +15,6 @@ block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST', 'LASTX',
 print("Sleeping for 2 second")
 time.sleep(2)
 
-position_taken = 0 # Position is open or closed
-trades_taken = 0
-current_trade = '' # Current position of long or trade closed
-
 def getLastPrice(symbol):
     # Bool value to check if its connected: True
     # print(tosdb.connected())
@@ -62,10 +58,17 @@ def tosCustomStudyData(symbol):
     val, times = block.get(symbol, 'CUSTOM5', date_time=True)
     if val == "1.0":
         return True
-    elif val == "0.0":
+    elif val == "-1.0":
         return False
     tosdb.clean_up()
 
+
+
+position_taken = 0 # Position is open or closed
+trades_taken = 0
+current_trade = '' # Current position of long or trade closed
+buy_price = 0
+flatten_price = 0
 
 if __name__ == '__main__':
     # # tosDBohlc()
@@ -91,8 +94,11 @@ if __name__ == '__main__':
             trades_taken += 1
             position_taken = 1
             current_trade = 'Long'
-            print("Trade Taken ")
-            print(trades_taken, position_taken, current_trade)
+            buy_price = getLastPrice('/MES:XCME')
+            print("Trade Taken")
+            print("Trades" + " | " + "Position" + " | " + "Current Signal" + " | " + "Buy Price")
+            print(trades_taken, position_taken, current_trade, buy_price)
+            print(" ")
 
         '''
         if signal is long(true) and postion is already taken
@@ -100,7 +106,9 @@ if __name__ == '__main__':
         '''
         if tosCustomStudyData('/MES:XCME') == True and position_taken == 1:
             print("Existing Positions ")
-            print(trades_taken, position_taken, current_trade)
+            print("Trades" + " | " + "Position" + " | " + "Current Signal" + " | " + "Buy Price")
+            print(trades_taken, position_taken, current_trade, buy_price)
+            print(" ")
 
         '''
         if signal is Short(False) and position is taken
@@ -109,15 +117,22 @@ if __name__ == '__main__':
         if tosCustomStudyData('/MES:XCME') == False and position_taken == 1:
             position_taken = 0
             current_trade = 'Trade Closed'
-            print("Short signal sent, Trade Closed ")
-            print(trades_taken, position_taken, current_trade)
+            flatten_price = getLastPrice('/MES:XCME')
+            print("Short Signal Recieved, Trade Closed ")
+            print("Trades" + " | " + "Position" + " | " + "Current Signal" + " | " + "Flatten Price")
+            print(trades_taken, position_taken, current_trade, flatten_price)
+            print(" ")
 
         '''
         if signal is Short(False) and position is not taken
         output the positions 
         '''
         if tosCustomStudyData('/MES:XCME') == False and position_taken != 1:
+            buy_price = 0
+            flatten_price = 0
             print("No Trade ")
+            print("Trades" + " | " + "Position" + " | " + "Current Signal")
             print(trades_taken, position_taken, current_trade)
+            print(" ")
 
-        time.sleep(5)
+        time.sleep(10)
