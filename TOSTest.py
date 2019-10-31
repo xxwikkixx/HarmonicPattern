@@ -15,9 +15,9 @@ block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST', 'LASTX',
 print("Sleeping for 2 second")
 time.sleep(2)
 
-position_taken = 0
+position_taken = 0 # Position is open or closed
 trades_taken = 0
-current_trade = ''
+current_trade = '' # Current position of long or trade closed
 
 def getLastPrice(symbol):
     # Bool value to check if its connected: True
@@ -81,14 +81,43 @@ if __name__ == '__main__':
     # tosCustomStudyData('/MES:XCME')
     while True:
         current_price = getLastPrice('/MES:XCME')
+        '''
+        if signal is long(True) and postion is not taken
+        Increase trade count
+        Take position
+        Set the trade Long
+        '''
         if tosCustomStudyData('/MES:XCME') == True and position_taken != 1:
             trades_taken += 1
             position_taken = 1
             current_trade = 'Long'
+            print("Trade Taken ")
             print(trades_taken, position_taken, current_trade)
-        if tosCustomStudyData('/MES:XCME') == False and position_taken == 1 :
+
+        '''
+        if signal is long(true) and postion is already taken
+        output the positions
+        '''
+        if tosCustomStudyData('/MES:XCME') == True and position_taken == 1:
+            print("Existing Positions ")
+            print(trades_taken, position_taken, current_trade)
+
+        '''
+        if signal is Short(False) and position is taken
+        set position taken to closed 
+        '''
+        if tosCustomStudyData('/MES:XCME') == False and position_taken == 1:
             position_taken = 0
             current_trade = 'Trade Closed'
+            print("Short signal sent, Trade Closed ")
             print(trades_taken, position_taken, current_trade)
-        print("Sleeping every 1 second")
-        time.sleep(1)
+
+        '''
+        if signal is Short(False) and position is not taken
+        output the positions 
+        '''
+        if tosCustomStudyData('/MES:XCME') == False and position_taken != 1:
+            print("No Trade ")
+            print(trades_taken, position_taken, current_trade)
+
+        time.sleep(5)
