@@ -2,6 +2,7 @@ import tosdb
 import time
 import numpy as np
 import pandas as pd
+from datetime import datetime 
 from tosdb.intervalize import ohlc
 from timeit import default_timer
 from xlwings import *
@@ -13,6 +14,10 @@ block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST', 'LASTX',
 ### NOTICE WE ARE SLEEPING TO ALLOW DATA TO GET INTO BLOCK ###
 print("Sleeping for 2 second")
 time.sleep(2)
+
+position_taken = 0
+trades_taken = 0
+current_trade = ''
 
 def getLastPrice(symbol):
     # Bool value to check if its connected: True
@@ -40,46 +45,27 @@ def getLastPrice(symbol):
     return block.get(symbol, 'LAST')
 
 
-
 def tosDBohlc():
     block = ohlc.tosdb.TOSDB_ThreadSafeDataBlock(10000)
     intrv = ohlc.TOSDB_OpenHighLowCloseIntervals(block, 60)
     print(intrv.get('/ES:XCME', 'OPEN'))
-
     tosdb.clean_up()
 
-
-def test():
-    buffer = []
-    time.sleep(3)  # allow block time to load the cache
-    buffer.append(block.get('/ES:XCME', 'BIDX', date_time=True,
-                            indx=0))  # update marker
-    time.sleep(5)  # wait perhaps for transactions to occur
-    timer = 0
-    while (timer < 5):  # get transactions for 5 seconds
-        data,data2= block.get('/ES:XCME', 'BIDX', date_time=True) # this works
-        # data = block.stream_snapshot_from_marker('/ES:XCME', 'BIDX', date_time=True, beg=0)
-        print(data)
-        print(data2)
-        buffer.append(data)
-        timer = default_timer()
-    tosdb.clean_up()
-    print(buffer)
 
 def tosOHLC():
     val = block.get("/MES:XCME", "CUSTOM9", date_time=False)
     op,hi,lo,cl = val.split("|")
     print(op, hi, lo, cl)
 
-def tosCustomStudyData():
-    while True:
-        esval, estimes = block.get('/MES:XCME', 'CUSTOM5', date_time=True)
-        ymval, ymtimes = block.get('/MYM:XCBT', 'CUSTOM5', date_time=True)
-        if esval == "1.0":
-            print("ES LONG")
-        elif esval == "0.0":
-            print("ES SHORT")
-    # tosdb.clean_up()
+
+def tosCustomStudyData(symbol):
+    val, times = block.get(symbol, 'CUSTOM5', date_time=True)
+    if val == "1.0":
+        return True
+    elif val == "0.0":
+        return False
+    tosdb.clean_up()
+
 
 if __name__ == '__main__':
     # # tosDBohlc()
@@ -90,6 +76,19 @@ if __name__ == '__main__':
     #     print(data, times)
     #     time.sleep(.5)
 
-    tosOHLC()
+    # tosOHLC()
 
-    # tosStudyData()
+    # tosCustomStudyData('/MES:XCME')
+    while True:
+        current_price = getLastPrice('/MES:XCME')
+        if tosCustomStudyData('/MES:XCME') == True and position_taken != 1:
+            trades_taken += 1
+            position_taken = 1
+            current_trade = 'Long'
+            print(trades_taken, position_taken, current_trade)
+        if tosCustomStudyData('/MES:XCME') == False and position_taken == 1 :
+            position_taken = 0
+            current_trade = 'Trade Closed'
+            print(trades_taken, position_taken, current_trade)
+        print("Sleeping every 1 second")
+        time.sleep(1)
