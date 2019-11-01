@@ -16,21 +16,6 @@ print("Sleeping for 2 second")
 time.sleep(2)
 
 def getLastPrice(symbol):
-    # Bool value to check if its connected: True
-    # print(tosdb.connected())
-
-    # Bool value to check if the engine is connected
-    # print(tosdb.connection_state()== tosdb.CONN_ENGINE_TOS)
-
-    # block = tosdb.TOSDB_DataBlock(100000, True)
-
-    # block.add_items('/ES:XCME')
-    # block.add_topics('OPEN', 'HIGH', 'LOW', 'bid', 'ask', 'volume', 'LAST')
-
-    # ### NOTICE WE ARE SLEEPING TO ALLOW DATA TO GET INTO BLOCK ###
-    # print("sleeping for 1.5 seconds")
-    # time.sleep(1.5)
-
     # ['ASK', 'BID', 'VOLUME']
     # print(block.topics())
 
@@ -48,10 +33,14 @@ def tosDBohlc():
     tosdb.clean_up()
 
 
-def tosOHLC():
+def tosOHLCMinute():
     val = block.get("/MES:XCME", "CUSTOM9", date_time=False)
-    op,hi,lo,cl = val.split("|")
-    print(op, hi, lo, cl)
+    open,high,low,close = val.split("|")
+    open = float(open.replace(",", ''))
+    high = float(high.replace(",", ''))
+    low = float(low.replace(",", ''))
+    close = float(close.replace(",", ''))
+    return open, high, low, close
 
 
 def tosCustomStudyData(symbol):
@@ -62,6 +51,8 @@ def tosCustomStudyData(symbol):
         return False
     tosdb.clean_up()
 
+def tosPlotChart():
+    pass
 
 
 position_taken = 0 # Position is open or closed
@@ -71,17 +62,13 @@ buy_price = 0
 flatten_price = 0
 
 if __name__ == '__main__':
-    # # tosDBohlc()
-
+    tosPlotChart()
     # while True:
     #     # print(getLastPrice('/ES:XCME'))
     #     data, times = block.get('/ES:XCME', 'LAST', date_time=True)
     #     print(data, times)
     #     time.sleep(.5)
 
-    # tosOHLC()
-
-    # tosCustomStudyData('/MES:XCME')
     while True:
         current_price = getLastPrice('/MES:XCME')
         '''

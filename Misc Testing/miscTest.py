@@ -36,7 +36,7 @@ def plotMaxMin():
     plt.show()
 
 
-def plotPeaks(price, order=10):
+def plotPeaks(price):
     # Find our relative extrema
     # Return the max indexes of the extrema
     max_idx = list(argrelextrema(price, np.greater, order=10)[0])
@@ -94,4 +94,4 @@ def supres(ltp, n):
     return support, resistance
 
 if __name__ == '__main__':
-    plotMaxMin()
+    pass
