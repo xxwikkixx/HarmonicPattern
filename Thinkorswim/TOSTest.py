@@ -16,14 +16,7 @@ print("Sleeping for 2 second")
 time.sleep(2)
 
 def getLastPrice(symbol):
-    # ['ASK', 'BID', 'VOLUME']
-    # print(block.topics())
-
-    # while True:
-    #     print(block.get('/ES:XCME', 'LAST'))
-    #     time.sleep(.5)
-    # tosdb.clean_up()
-    return block.get(symbol, 'LAST')
+    return block.get(symbol, 'LAST', date_time=True)
 
 
 def tosDBohlc():
@@ -43,7 +36,7 @@ def tosOHLCMinute():
     return open, high, low, close
 
 
-def tosCustomStudyData(symbol):
+def tosVolTrailingStopSTUDY(symbol):
     val, times = block.get(symbol, 'CUSTOM5', date_time=True)
     if val == "1.0":
         return True
@@ -63,25 +56,21 @@ flatten_price = 0
 
 if __name__ == '__main__':
     tosPlotChart()
-    # while True:
-    #     # print(getLastPrice('/ES:XCME'))
-    #     data, times = block.get('/ES:XCME', 'LAST', date_time=True)
-    #     print(data, times)
-    #     time.sleep(.5)
+    ticker = '/MES:XCME'
+    current_price = getLastPrice(ticker)
 
     while True:
-        current_price = getLastPrice('/MES:XCME')
         '''
         if signal is long(True) and postion is not taken
         Increase trade count
         Take position
         Set the trade Long
         '''
-        if tosCustomStudyData('/MES:XCME') == True and position_taken != 1:
+        if tosVolTrailingStopSTUDY(ticker) == True and position_taken != 1:
             trades_taken += 1
             position_taken = 1
             current_trade = 'Long'
-            buy_price = getLastPrice('/MES:XCME')
+            buy_price = getLastPrice(ticker)
             print("Trade Taken")
             print("Trades" + " | " + "Position" + " | " + "Current Signal" + " | " + "Buy Price")
             print(trades_taken, position_taken, current_trade, buy_price)
@@ -91,7 +80,7 @@ if __name__ == '__main__':
         if signal is long(true) and postion is already taken
         output the positions
         '''
-        if tosCustomStudyData('/MES:XCME') == True and position_taken == 1:
+        if tosVolTrailingStopSTUDY(ticker) == True and position_taken == 1:
             print("Existing Positions ")
             print("Trades" + " | " + "Position" + " | " + "Current Signal" + " | " + "Buy Price")
             print(trades_taken, position_taken, current_trade, buy_price)
@@ -101,10 +90,10 @@ if __name__ == '__main__':
         if signal is Short(False) and position is taken
         set position taken to closed 
         '''
-        if tosCustomStudyData('/MES:XCME') == False and position_taken == 1:
+        if tosVolTrailingStopSTUDY(ticker) == False and position_taken == 1:
             position_taken = 0
             current_trade = 'Trade Closed'
-            flatten_price = getLastPrice('/MES:XCME')
+            flatten_price = getLastPrice(ticker)
             print("Short Signal Recieved, Trade Closed ")
             print("Trades" + " | " + "Position" + " | " + "Current Signal" + " | " + "Flatten Price")
             print(trades_taken, position_taken, current_trade, flatten_price)
@@ -114,7 +103,7 @@ if __name__ == '__main__':
         if signal is Short(False) and position is not taken
         output the positions 
         '''
-        if tosCustomStudyData('/MES:XCME') == False and position_taken != 1:
+        if tosVolTrailingStopSTUDY(ticker) == False and position_taken != 1:
             buy_price = 0
             flatten_price = 0
             print("No Trade ")
@@ -122,4 +111,4 @@ if __name__ == '__main__':
             print(trades_taken, position_taken, current_trade)
             print(" ")
 
-        time.sleep(10)
+        time.sleep(5)
