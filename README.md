@@ -1,10 +1,5 @@
 # Harmonic Patterns
-Detection and Signal of Harmonic Patterns 
-
-1. Pull live data from ThinkOrSwim Trading Platform using @TOSDataBridge
-2. Detect pattern complettion on live data
-3. Send text alert and place automated trade using TD API.
-
+Detection of Harmonic Patterns 
 
 For now testing using a CSV file to pull historic data for GOLD.
 
