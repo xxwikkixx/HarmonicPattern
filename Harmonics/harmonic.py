@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from Harmonics.harmonic_func import *
+from harmonic_func import *
 
 # Importing Data
 data = pd.read_csv('file.csv')
