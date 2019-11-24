@@ -1,6 +1,9 @@
-import pyautogui
+import csv
 import time
+import pyautogui
 
-while True:
-    print(pyautogui.position())
-    time.sleep(.01)
+
+with open('tradelog.csv','a', newline='') as newFile:
+    newFileWriter = csv.writer(newFile)
+    for i in range(10):
+        newFileWriter.writerow([i])
